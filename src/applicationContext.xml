@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+        
+<beans -->       
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- <context:annotation-config /> -->
+	<!-- 下面的配置作用是指定spring扫描的包,它包含了context:annotation-config的功能，所以在开发中一般就不需要在配置上面的 -->
+	<!-- <context:component-scan base-package="tk.chuanjing.spring.chapter01.annotation" /> -->
+	<context:component-scan base-package="tk.chuanjing.spring" />
+	
+	
+	<import resource="./chapter01.xml"/>
+	
+	<!-- <import resource="./chapter02_aop1.xml"/> -->
+	
+	<!-- <import resource="./chapter02_aop2.xml"/> -->
+	
+	<!-- <import resource="./chapter02_aop3.xml"/> -->
+	
+	<!-- <import resource="./chapter02_aop4.xml"/> -->
+	
+	<import resource="./chapter03.xml"/>
+
+</beans>

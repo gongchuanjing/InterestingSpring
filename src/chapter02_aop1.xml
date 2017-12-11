@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+        
+<beans -->       
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 传统基于代理的AOP开发 -->
+	
+	<!-- 目标target -->
+	<bean name="orderService" class="tk.chuanjing.spring.chapter02.aop.OrderServiceImpl"></bean>
+	
+	<!-- 通知advice -->
+	<bean name="orderServiceAdvice" class="tk.chuanjing.spring.chapter02.aop.OrderHelper"></bean>
+
+	<!-- 定义切点 pointcut 
+	<bean name="orderServicePointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+		<property name="mappedNames">
+			<list>
+				<value>addOrder</value>
+				<value>updateOrder</value>
+			</list>
+		</property>
+	</bean>
+	-->
+	
+	<!-- 定义切点 pointcut -->
+	<bean name="orderServicePointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+		<property name="pattern" value=".*Order"></property>
+	</bean>
+	
+	
+	<!-- 切面aspect=pointcut+advice -->
+	<bean name="orderServiceAspect" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="orderServiceAdvice"></property>
+		<property name="pointcut" ref="orderServicePointcut"></property>
+	</bean>
+
+	<!-- 代理 proxy 
+	<bean name="orderServiceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="orderService"></property>
+		<property name="interceptorNames" value="orderServiceAspect"></property>
+		<property name="proxyInterfaces" value="tk.chuanjing.spring.chapter02.aop.IOrderService"></property>
+	</bean>
+	-->
+	
+	<!-- 替换上面五行 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	
+</beans>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+        
+<beans -->       
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 传统基于aspectJ切点AOP开发 -->
+	
+	<!-- 目标target -->
+	<bean name="orderService" class="tk.chuanjing.spring.chapter02.aop.OrderServiceImpl"></bean>
+	
+	<!-- 通知advice -->
+	<bean name="orderServiceAdvice" class="tk.chuanjing.spring.chapter02.aop.OrderHelper"></bean>
+
+	<!-- 使用aop标签来完成切面与切点声明
+		
+		在配置文件中配置切面(切面=切点+通知)
+		<aop:config>来声明要对aop进行配置
+		<aop:pointcut>它是用于声明切点(简单说就是对哪些方法进行拦截)
+		<aop:advisor> 定义传统的aop的切面,传统的aop切面它只能包含一个切点与一个增强
+		<aop:aspect>定义aspectj框架的切面.,它可以包含多个切点与多个通知
+	-->
+	<aop:config>
+		<!-- 定义切点 -->
+		<aop:pointcut expression="execution(* tk.chuanjing.spring.chapter02.aop.IOrderService.*(..))" id="orderServicePointcut"/>
+		
+		<!-- 定义切面 -->
+		<aop:advisor advice-ref="orderServiceAdvice" pointcut-ref="orderServicePointcut"/>
+		
+		<!-- <aop:aspect></aop:aspect> aspectj框架它定义切面使用的 -->
+	</aop:config>
+	
+</beans>

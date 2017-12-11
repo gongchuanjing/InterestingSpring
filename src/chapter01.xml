@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+        
+<beans -->       
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--
+	<bean id="UserService" class="tk.chuanjing.spring.chapter01.ioc.UserServiceImpl">
+		<property name="info" value="依赖注入"></property>
+	</bean>
+	-->
+	
+	<!-- 在开发中可以使用id或name
+		id它遵守的xml规范，名称中不能包含特殊符号
+		name它是为了更好的扩展，在name中可以包含一些特殊符号，例如"/"
+	
+	<bean name="Bean1" class="tk.chuanjing.spring.chapter01.bean.Bean1" scope="singleton"></bean>
+	-->
+	
+	<!-- 静态工厂方法 
+	<bean name="Bean2" class="tk.chuanjing.spring.chapter01.bean.Bean2Factory" factory-method="createBean2"></bean>
+	-->
+	
+	<!-- 实例工厂方法 -->
+	<bean name="Bean3Factory" class="tk.chuanjing.spring.chapter01.bean.Bean3Factory"></bean>
+	<bean name="Bean3" factory-bean="Bean3Factory" factory-method="createBean3"></bean>
+	
+	
+	<!-- 演示生命周期
+	<bean name="BeanLifeCycle" class="tk.chuanjing.spring.chapter01.bean.BeanLifeCycle"
+		  init-method="myInit" destroy-method="myDestroy">
+		  
+		<property name="name" value="张三"></property>
+	</bean>
+	<bean class="tk.chuanjing.spring.chapter01.bean.MyBeanPostProcessor"></bean>
+	-->
+	
+	
+	<!-- 使用构造方法对car的属性进行注入 -->
+	<bean name="Car" class="tk.chuanjing.spring.chapter01.di.Car">
+		<constructor-arg index="0" type="java.lang.String" value="保时捷"></constructor-arg>
+		<constructor-arg index="1" type="double" value="888000"></constructor-arg>
+	</bean>
+	
+	<!-- 使用setter方法对car的属性进行注入 -->
+	<bean name="Car1" class="tk.chuanjing.spring.chapter01.di.Car">
+		<property name="name" value="凯迪拉克"></property>
+		<property name="price" value="500000"></property>
+	</bean>
+	
+	<bean name="Person" class="tk.chuanjing.spring.chapter01.di.Person">
+		<property name="name" value="张三"></property>
+		<property name="car" ref="Car"></property>		<!-- ref引用其它bean的id或name值 -->
+	</bean>
+	
+	<!-- 集合属性注入 -->
+	<bean name="CollectionDemo" class="tk.chuanjing.spring.chapter01.di.CollectionDemo">
+		<property name="list">
+			<list>
+				<value>大宝剑</value>
+				<value>789</value>
+				<ref bean="Car"/>
+			</list>
+		</property>
+		
+		<property name="set">
+			<set>
+				<value>小宝剑</value>
+				<value>389</value>
+				<ref bean="Car1"/>
+			</set>
+		</property>
+		
+		<property name="map">
+			<map>
+				<entry key="name" value="全套"></entry>
+				<entry key="price" value="998"></entry>
+				<entry key-ref="Person" value-ref="Car"></entry>
+			</map>
+		</property>
+		
+		<property name="props">
+			<props>
+				<prop key="name">全套</prop>
+				<prop key="price">998</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!--
+	<bean name="Dog" class="tk.chuanjing.spring.chapter01.namsapce.Dog">
+		<property name="name" value="吉娃娃" />
+		<property name="color" value="黄色" />
+	</bean>
+	-->
+	<!-- 使用p名称空间来简化 上述操作 -->
+	<bean name="Dog" class="tk.chuanjing.spring.chapter01.namsapce.Dog" p:color="白色"></bean>
+	
+	<!--
+	<bean id="dog2" class="tk.chuanjing.spring.chapter01.namsapce.Dog">
+		<constructor-arg index="0" value="黑色" />
+		<constructor-arg index="1" value="大丹" />
+	</bean>
+	-->
+	<!-- 使用c名称空间来简化 上述操作 -->
+	<bean name="Dog2" class="tk.chuanjing.spring.chapter01.namsapce.Dog" c:name="霸王犬" c:color="黑色"></bean>
+	
+	<bean name="PersonSpace" class="tk.chuanjing.spring.chapter01.namsapce.Person"
+		p:name="张三" p:age="23" p:dog-ref="Dog2">
+	</bean>
+	
+	<bean name="PersonSpace2" class="tk.chuanjing.spring.chapter01.namsapce.Person">
+		<property name="name" value="#{PersonSpace.name}"></property>
+		<property name="dog" value="#{Dog2}"></property>
+		<!-- <property name="age" value="#{PersonSpace.age + 7}"></property> -->
+		<property name="age" value="#{PersonSpace.getAge() + 6}"></property>
+	</bean>
+</beans>

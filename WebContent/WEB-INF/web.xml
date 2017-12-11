@@ -23,7 +23,7 @@
     <description></description>
     <display-name>TestSpringServlet</display-name>
     <servlet-name>TestSpringServlet</servlet-name>
-    <servlet-class>cn.itheima.springday01.TestSpringServlet</servlet-class>
+    <servlet-class>tk.chuanjing.spring.chapter01.TestSpringServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>TestSpringServlet</servlet-name>
