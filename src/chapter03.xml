@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+        
+<beans -->       
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 引入外部的properties文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+
+	<!-- 配置spring自带连接池：
+	<bean name="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/interestingssh" />
+		<property name="username" value="root" />
+		<property name="password" value="12345" />
+	</bean>
+	-->
+	
+	<!-- 配置c3p0连接池：
+	<bean name="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/interestingssh" />
+		<property name="user" value="root" />
+		<property name="password" value="12345" />
+	</bean>
+	-->
+	
+	<!-- 配置c3p0连接池，采用引入外部属性properties文件的方式-->
+	<bean name="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClass}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- 使用连接池，如果dao继承了JdbcDaoSupport就不需要这个配置了 -->
+	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<!-- <property name="dataSource" ref="driverManagerDataSource"></property> -->
+		<property name="dataSource" ref="c3p0DataSource" />
+	</bean>
+	
+	
+	
+	<!-- service -->
+	<bean name="accountService" class="tk.chuanjing.spring.chapter03.transaction.service.AccountServiceImpl">
+		<property name="accountDAO" ref="accountDAO" />
+	</bean>
+	
+	<!-- dao -->
+	<bean name="accountDAO" class="tk.chuanjing.spring.chapter03.transaction.dao.AccountDAOImpl">
+		<!-- 当注入dataSource后，底层会自动创建一个JdbcTemplate -->
+		<property name="dataSource" ref="c3p0DataSource" />
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="c3p0DataSource" />
+	</bean>
+	
+	<!-- 配置通知，如果使用注解就不需要这个
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			
+				name:必须的，对哪些方法进行事务控制
+			 	isolation 可选 设置事务隔离级别 默认是DEFAULT 
+			 	propagation:可选 设置事务传播 默认值 REQUIRED
+			 	timeout 可选 超时时间 默认值-1 
+			 	read-only 可选 默认值是false 如果不是只读，它可以对insert update delete操作，如果是只读不可以。
+			 	rollback-for 可选 可以设置一个异常，如果产生这个异常，触发事务回滚
+			 	no-rolback-for 可选 可以设置一个异常，如果产生这个异常，不会触发事务回滚
+			 
+			<tx:method name="account"/>
+			<tx:method name="account2"/>这里可以配置多个tx:method
+		</tx:attributes>
+	</tx:advice>
+	-->
+	
+	<!-- 配置切面 如果使用注解就不需要这个
+	<aop:config>
+		定义切点
+		<aop:pointcut id="txPointcut" expression="execution(* tk.chuanjing.spring.chapter03.transaction.service.IAccountService.account(..))" />
+	
+		定义切面
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config>
+	-->
+	
+	<!-- 如果使用注解配置事务，得配置这句 相当于开启注解事务控制-->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
