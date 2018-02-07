@@ -13,12 +13,13 @@
 
 ## 总体大纲（只列出了部分重要的技术点）
 	chapter01
-		
+		整理中……
 	chapter02
-			
+		……
 	chapter03
-		
+		……
 	chapter04
+		……
 
 ## 打个广告：其他技术的整理
 JavaSE：[InterestingJavaSE](https://github.com/gongchuanjing/InterestingJavaSE.git)
