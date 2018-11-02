@@ -62,3 +62,35 @@ public class BeanLifeCycle implements IBeanLifeCycle, BeanNameAware, Application
 		System.out.println("第十一步:执行自定义的销毁方法");
 	}
 }
+/*
+public class BeanLifeCycle implements InitializingBean, DisposableBean {
+
+	public BeanLifeCycle() {
+		System.out.println("BeanLifeCycle:实例化BeanLifeCycle对象");
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		System.out.println("afterPropertiesSet:属性注入完成后");
+	}
+
+	public void myInit() {
+		System.out.println("myInit:自定义的init方法");
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		System.out.println("destroy:执行destroy方法");
+	}
+
+	public void myDestroy() {
+		System.out.println("myDestroy:执行自定义的销毁方法");
+	}
+}
+
+BeanLifeCycle:实例化BeanLifeCycle对象
+afterPropertiesSet:属性注入完成后
+myInit:自定义的init方法
+destroy:执行destroy方法
+myDestroy:执行自定义的销毁方法
+*/
